@@ -1,0 +1,42 @@
+{
+    "name": "scarn-simulator",
+    "version": "0.0.1-alpha",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "files": [
+      "dist"
+    ],
+    "scripts": {
+      "build": "tsc",
+      "test": "vitest",
+      "test:watch": "vitest --watch",
+      "test:ui": "vitest --ui",
+      "test:coverage": "vitest --coverage",
+      "test:run": "vitest run",
+      "dev": "tsc --watch",
+      "clean": "rm -rf dist",
+      "prepublishOnly": "npm run clean && npm run build && npm run test:run"
+    },
+    "devDependencies": {
+      "@midnight-ntwrk/ledger": "^4.0.0",
+      "@midnight-ntwrk/zswap": "^4.0.0",
+      "@types/node": "^22",
+      "typescript": "^5.2.2",
+      "vitest": "^3.1.3",
+      "c8": "^8.0.0"
+    },
+    "peerDependencies": {
+      "@midnight-ntwrk/compact-runtime": "^0.8.1"
+    },
+  "packageManager": "pnpm@8.15.0",
+  "engines": {
+    "pnpm": ">=8.0.0"
+  }
+}
