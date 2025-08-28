@@ -3,7 +3,6 @@ export { AbstractSimulator } from './core/AbstractSimulator.js';
 export { ContractSimulator } from './core/ContractSimulator.js';
 export { StateManager } from './core/StateManager.js';
 
-// Export types
 export type {
   IContractSimulator,
   ContextlessCircuits,
