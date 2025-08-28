@@ -15,11 +15,7 @@
     ],
     "scripts": {
       "build": "tsc",
-      "test": "vitest",
-      "test:watch": "vitest --watch",
-      "test:ui": "vitest --ui",
-      "test:coverage": "vitest --coverage",
-      "test:run": "vitest run",
+      "test": "vitest run",
       "dev": "tsc --watch",
       "clean": "rm -rf dist",
       "prepublishOnly": "npm run clean && npm run build && npm run test:run"
