@@ -30,7 +30,7 @@ export default defineConfig({
     testTimeout: 10000,
 
     // Setup files
-    setupFiles: ['./test/setup.ts']
+    //setupFiles: ['./test/setup.ts']
   },
 
   // Resolve configuration for imports
