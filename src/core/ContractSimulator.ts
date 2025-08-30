@@ -30,6 +30,8 @@ export abstract class ContractSimulator<P, L> extends AbstractSimulator<P, L> {
    * 1. Single-use override (set via `as(caller)`)
    * 2. Persistent override (set via `setPersistentCaller(caller)`)
    * 3. Default caller context
+   *
+   * @returns A CircuitContext with the appropriate caller information applied
    */
   public getCallerContext(): CircuitContext<P> {
     const activeCaller = this.callerOverride || this.persistentCallerOverride;
@@ -42,7 +44,11 @@ export abstract class ContractSimulator<P, L> extends AbstractSimulator<P, L> {
     };
   }
 
-  /** Gets the current circuit context from the state manager */
+  /**
+   * Gets the current circuit context from the state manager 
+   *
+   * @returns The current circuit context
+   */
   get circuitContext(): CircuitContext<P> {
     return this.stateManager.getContext();
   }
