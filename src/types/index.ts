@@ -6,3 +6,4 @@ export type {
   ExtractImpureCircuits
 } from './Circuit.js';
 export type { BaseSimulatorOptions } from './Options.js';
+export type { IMinimalContract } from './Contract.js'
