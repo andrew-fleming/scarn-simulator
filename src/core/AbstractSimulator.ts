@@ -85,7 +85,7 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
   /**
    * Creates a proxy wrapper around pure circuits.
    * Pure circuits do not modify contract state, so only the result is returned.
-   * 
+   *
    * @param circuits - The pure circuit functions to wrap
    * @param context - Function that provides the current circuit context
    * @returns A contextless proxy that automatically injects context and extracts results
@@ -94,28 +94,26 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
     circuits: Circuits,
     context: () => CircuitContext<P>,
   ): ContextlessCircuits<Circuits, P> {
-    const self = this;
 
     return new Proxy(circuits, {
       /**
        * Proxy getter that wraps circuit functions to handle context injection.
-       * 
+       *
        * @param target - The original circuits object
        * @param prop - The property being accessed
        * @param receiver - The proxy object
        * @returns The original property or a wrapped function
        */
-      get(target, prop, receiver) {
+      get: (target, prop, receiver) => {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original !== 'function') return original;
 
-        return (...args: any[]) => {
-          const ctx = context();
-          const fn = original as (ctx: CircuitContext<P>, ...args: any[]) => { result: any };
-          const result = fn(ctx, ...args).result;
+        return (...args: unknown[]) => {
+          const fn = original as (ctx: CircuitContext<P>, ...args: unknown[]) => { result: unknown };
+          const result = fn(context(), ...args).result;
 
           // Auto-reset single-use caller override
-          self.callerOverride = null;
+          this.callerOverride = null;
           return result;
         };
       },
@@ -125,7 +123,7 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
   /**
    * Creates a proxy wrapper around impure circuits.
    * Impure circuits can modify contract state, so the circuit context is updated accordingly.
-   * 
+   *
    * @param circuits - The impure circuit functions to wrap
    * @param context - Function that provides the current circuit context
    * @param updateContext - Function to update the circuit context after execution
@@ -136,38 +134,36 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
     context: () => CircuitContext<P>,
     updateContext: (ctx: CircuitContext<P>) => void,
   ): ContextlessCircuits<Circuits, P> {
-    const self = this;
-
     return new Proxy(circuits, {
       /**
        * Proxy getter that wraps circuit functions to handle context injection and updates.
-       * 
+       *
        * @param target - The original circuits object
        * @param prop - The property being accessed
        * @param receiver - The proxy object
        * @returns The original property or a wrapped function
        */
-      get(target, prop, receiver) {
+      get: (target, prop, receiver) => {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original !== 'function') return original;
 
-        return (...args: any[]) => {
-          const ctx = context();
+        return (...args: unknown[]) => {
           const fn = original as (
             ctx: CircuitContext<P>,
-            ...args: any[]
-          ) => { result: any; context: CircuitContext<P> };
+            ...args: unknown[]
+          ) => { result: unknown; context: CircuitContext<P> };
 
-          const { result, context: newCtx } = fn(ctx, ...args);
+          const { result, context: newCtx } = fn(context(), ...args);
           updateContext(newCtx);
 
           // Auto-reset single-use caller override
-          self.callerOverride = null;
+          this.callerOverride = null;
           return result;
         };
       },
-    }) as ContextlessCircuits<Circuits, P>;
-  }
+    }
+  ) as ContextlessCircuits<Circuits, P>;
+}
 
   /**
    * Optional method to reset any cached circuit proxies.
