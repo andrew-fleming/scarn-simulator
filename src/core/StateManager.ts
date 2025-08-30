@@ -32,7 +32,7 @@ export class StateManager<P> {
     contract: {
       initialState: (
         ctx: ConstructorContext<P>,
-        ...args: any[]
+        ...args: unknown[]
       ) => {
         currentPrivateState: P;
         currentContractState: ContractState;
@@ -42,7 +42,7 @@ export class StateManager<P> {
     privateState: P,
     coinPK: CoinPublicKey,
     contractAddress: ContractAddress,
-    ...contractArgs: any[]
+    ...contractArgs: unknown[]
   ) {
     const initCtx = constructorContext(privateState, coinPK);
 
