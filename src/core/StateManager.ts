@@ -22,6 +22,7 @@ export class StateManager<P> {
    * Creates an instance of `StateManager`.
    *
    * @param contract - A compiled Compact contract instance exposing `initialState()`
+   * @param contract.initialState - Function that initializes contract state given a constructor context
    * @param privateState - The initial private state to inject into the contract
    * @param coinPK - The caller's coin public key
    * @param contractAddress - Optional override for the contract's address
@@ -67,12 +68,20 @@ export class StateManager<P> {
     return this.context;
   }
 
-  /** Replaces the internal `CircuitContext` with a new one */
+  /**
+   * Replaces the internal `CircuitContext` with a new one.
+   *
+   * @param newContext - The new circuit context to replace the current one
+   */
   setContext(newContext: CircuitContext<P>) {
     this.context = newContext;
   }
 
-  /** Updates just the private state inside the existing context */
+  /**
+   * Updates just the private state inside the existing context.
+   *
+   * @param newPrivateState - The new private state to set in the current context
+   */
   updatePrivateState(newPrivateState: P) {
     this.context.currentPrivateState = newPrivateState;
   }

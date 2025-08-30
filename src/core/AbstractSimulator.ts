@@ -35,6 +35,9 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Sets the caller context for the next circuit call only (auto-resets).
+   * 
+   * @param caller - The public key to use as the caller for the next circuit execution
+   * @returns This simulator instance for method chaining
    */
   public as(caller: CoinPublicKey): this {
     this.callerOverride = caller;
@@ -43,6 +46,8 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Sets a persistent caller that will be used for all subsequent circuit calls.
+   * 
+   * @param caller - The public key to use as the caller for all future calls, or null to clear
    */
   public setPersistentCaller(caller: CoinPublicKey | null): void {
     this.persistentCallerOverride = caller;
@@ -50,6 +55,8 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Clears both single-use and persistent caller overrides.
+   * 
+   * @returns This simulator instance for method chaining
    */
   public resetAllCallers(): this {
     this.callerOverride = null;
@@ -59,6 +66,8 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Retrieves the current private state from the circuit context.
+   * 
+   * @returns The current private state of type P
    */
   public getPrivateState(): P {
     return this.circuitContext.currentPrivateState;
@@ -66,6 +75,8 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Retrieves the original contract state from the circuit context.
+   * 
+   * @returns The current contract state from the blockchain
    */
   public getContractState(): ContractState {
     return this.circuitContext.originalState;
@@ -74,6 +85,10 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
   /**
    * Creates a proxy wrapper around pure circuits.
    * Pure circuits do not modify contract state, so only the result is returned.
+   * 
+   * @param circuits - The pure circuit functions to wrap
+   * @param context - Function that provides the current circuit context
+   * @returns A contextless proxy that automatically injects context and extracts results
    */
   public createPureCircuitProxy<Circuits extends object>(
     circuits: Circuits,
@@ -82,6 +97,14 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
     const self = this;
 
     return new Proxy(circuits, {
+      /**
+       * Proxy getter that wraps circuit functions to handle context injection.
+       * 
+       * @param target - The original circuits object
+       * @param prop - The property being accessed
+       * @param receiver - The proxy object
+       * @returns The original property or a wrapped function
+       */
       get(target, prop, receiver) {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original !== 'function') return original;
@@ -102,6 +125,11 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
   /**
    * Creates a proxy wrapper around impure circuits.
    * Impure circuits can modify contract state, so the circuit context is updated accordingly.
+   * 
+   * @param circuits - The impure circuit functions to wrap
+   * @param context - Function that provides the current circuit context
+   * @param updateContext - Function to update the circuit context after execution
+   * @returns A contextless proxy that handles context injection and state updates
    */
   public createImpureCircuitProxy<Circuits extends object>(
     circuits: Circuits,
@@ -111,6 +139,14 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
     const self = this;
 
     return new Proxy(circuits, {
+      /**
+       * Proxy getter that wraps circuit functions to handle context injection and updates.
+       * 
+       * @param target - The original circuits object
+       * @param prop - The property being accessed
+       * @param receiver - The proxy object
+       * @returns The original property or a wrapped function
+       */
       get(target, prop, receiver) {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original !== 'function') return original;
@@ -135,6 +171,7 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Optional method to reset any cached circuit proxies.
+   * Implementations can override this to clear cached proxy instances.
    */
   public resetCircuitProxies?(): void {}
 }
