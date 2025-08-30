@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.cjs",
+  "sourceRoot": "../../../../",
+  "sources": ["test/mocks/Simple.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAAA;;;;;;;;MAOA,AAAA,MAEC;;;;cAFqB,GAAQ;;;;;;;;;;;;;;;;yCAAR,GAAQ;;;;;;;oEAAR,GAAQ;;;OAE7B;MAED,AAAA,MAEC;;;;;;;;;;;;;;;;;;;;OAAA;;;;;;GACA;EAdD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IAKA;;;;;;;;;uDAA0B;;;;;;;GASzB;EAPD,AAAA,UAEC,4BAFqB,GAAQ;IAC5B;;;;;;;yGAAgB,GAAC;;uDAAb;;GACL;EAED,AAAA,UAEC;mCADQ;;;;;;;;;;;sFAAI;GACZ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IARD;qCAAA;;;;;;;;;;;wFAA0B;KAAA;;;;;;;;;;;;;;"
+}
