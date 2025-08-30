@@ -32,7 +32,7 @@ export class StateManager<P> {
     contract: {
       initialState: (
         ctx: ConstructorContext<P>,
-        ...args: unknown[]
+        ...args: any[]
       ) => {
         currentPrivateState: P;
         currentContractState: ContractState;
@@ -42,7 +42,7 @@ export class StateManager<P> {
     privateState: P,
     coinPK: CoinPublicKey,
     contractAddress: ContractAddress,
-    ...contractArgs: unknown[]
+    ...contractArgs: any[]
   ) {
     const initCtx = constructorContext(privateState, coinPK);
 
@@ -63,7 +63,11 @@ export class StateManager<P> {
     };
   }
 
-  /** Retrieves the current `CircuitContext` */
+  /**
+   * Retrieves the current `CircuitContext`
+   *
+   * @returns The current circuit context
+   */
   getContext(): CircuitContext<P> {
     return this.context;
   }
