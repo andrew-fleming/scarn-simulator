@@ -1,24 +1,152 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { StateManager } from '../../src/core/StateManager';
+import {
+  type CircuitContext,
+  QualifiedCoinInfo,
+  encodeQualifiedCoinInfo,
+  sampleTokenType,
+  ContractState,
+  dummyContractAddress,
+  QueryContext,
+  EncodedZswapLocalState,
+  StateValue,
+  EncodedQualifiedCoinInfo,
+  encodeContractAddress
+} from '@midnight-ntwrk/compact-runtime';
+import {
+  type ContractAddress,
+  Contract as MockSimple,
+} from '../artifacts/Simple/contract/index.cjs';
+import {
+  SimplePrivateState,
+  SimpleWitnesses,
+} from '../mocks/SimpleWitnesses';
 
+// Helpers
+const toHexPadded = (str: string, len = 64) =>
+  Buffer.from(str, 'ascii').toString('hex').padStart(len, '0');
+
+export const encodeToAddress = (str: string): ContractAddress => {
+  const toHex = Buffer.from(str, 'ascii').toString('hex');
+  const fullAddress = '0200' + String(toHex).padStart(64, '0');
+  return { bytes: encodeContractAddress(fullAddress) };
+};
+
+// Constants
+const DEPLOYER = 'DEPLOYER';
+const deployer = toHexPadded(DEPLOYER);
+
+// Mut vars
+let mockContract: MockSimple<SimplePrivateState>;
+let initialPrivateState: SimplePrivateState;
+let stateManager: StateManager<SimplePrivateState>;
+let ctx: CircuitContext<SimplePrivateState>;
 
 describe('StateManager', () => {
-  let mockContract: any;
-  let privateState: any;
+  /**
+   * Parametrize me!
+   */
+  describe('constructor', () => {
+    beforeEach(() => {
+      mockContract = new MockSimple<SimplePrivateState>(SimpleWitnesses);
+      initialPrivateState = {};
 
-  beforeEach(() => {
-    privateState = { balance: 100n };
+      stateManager = new StateManager(
+        mockContract,
+        initialPrivateState,
+        deployer,
+        dummyContractAddress()
+      );
 
-    mockContract = {
-      initialState: vi.fn(() => ({
-        currentPrivateState: privateState,
-        currentContractState: { data: [] },
-        currentZswapLocalState: {}
-      }))
-    };
+      ctx = stateManager.getContext();
+    });
+
+    it('should set private state', () => {
+      expect(ctx.currentPrivateState).toEqual(initialPrivateState);
+    });
+
+    it('should set zswap local state', () => {
+      const expectedZswapState: EncodedZswapLocalState = {
+        coinPublicKey: { bytes: Uint8Array.from(Buffer.from(toHexPadded(DEPLOYER), 'hex')) },
+        currentIndex: 0n,
+        inputs: [],
+        outputs: []
+      };
+      expect(ctx.currentZswapLocalState).toEqual(expectedZswapState);
+    });
+
+    it('should set original state', () => {
+      expect(ctx.originalState).toBeInstanceOf(ContractState);
+      expect(ctx.originalState).toHaveProperty('__wbg_ptr');
+      expect((ctx.originalState as any).__wbg_ptr).toBeTypeOf('number');
+    });
+
+    it('should set tx ctx', () => {
+      // Need to go deeper
+      expect(ctx.transactionContext).toBeInstanceOf(QueryContext);
+      expect(ctx.transactionContext.address).toEqual(dummyContractAddress());
+      expect(ctx.transactionContext.state).toBeInstanceOf(StateValue);
+      expect(ctx.transactionContext.state).toHaveProperty('__wbg_ptr');
+    });
   });
 
-  it('should initialize with correct state', () => {
-    expect(1).toEqual(1);
+  describe('setContext', () => {
+    beforeEach(() => {
+      mockContract = new MockSimple<SimplePrivateState>(SimpleWitnesses);
+      initialPrivateState = {};
+
+      stateManager = new StateManager(
+        mockContract,
+        initialPrivateState,
+        deployer,
+        dummyContractAddress()
+      );
+
+      ctx = stateManager.getContext();
+    });
+
+    /**
+     * Improve me
+     */
+    it('should set new ctx', () => {
+      const oldCtx = stateManager.getContext();
+
+      const qualCoin: QualifiedCoinInfo = {
+        type: sampleTokenType(),
+        nonce: toHexPadded('nonce'),
+        value: 123n,
+        mt_index: 987n
+      }
+      const encQualCoin: EncodedQualifiedCoinInfo = encodeQualifiedCoinInfo(qualCoin);
+
+      // zswap local state
+      const zswapLocalState_1: EncodedZswapLocalState = {
+        coinPublicKey: { bytes: Uint8Array.from(Buffer.from(toHexPadded('goldenFace'), 'hex')) },
+        currentIndex: 555n,
+        inputs: [encQualCoin],
+        outputs: []
+      };
+
+      // OG state
+      const NEW_OG_STATE: ContractState = new ContractState();
+
+      // Query ctx
+      const modifiedTxCtx: QueryContext = {
+        ...ctx.transactionContext,
+        address: encodeToAddress('otherAddress')
+      } as unknown as QueryContext;
+
+      // Build new ctx
+      const newCtx: CircuitContext<SimplePrivateState> = {
+        originalState: NEW_OG_STATE,
+        currentPrivateState: initialPrivateState,
+        currentZswapLocalState: zswapLocalState_1,
+        transactionContext: modifiedTxCtx
+      }
+
+      stateManager.setContext(newCtx);
+      expect(stateManager.getContext()).toEqual(newCtx);
+      expect(stateManager.getContext()).not.toEqual(oldCtx);
+    });
   });
 });
