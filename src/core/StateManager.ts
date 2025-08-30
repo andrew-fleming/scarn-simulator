@@ -4,6 +4,9 @@ import {
   type ContractState,
   constructorContext,
   QueryContext,
+  EncodedZswapLocalState,
+  CoinPublicKey,
+  ContractAddress
 } from '@midnight-ntwrk/compact-runtime';
 
 /**
@@ -32,12 +35,12 @@ export class StateManager<P> {
       ) => {
         currentPrivateState: P;
         currentContractState: ContractState;
-        currentZswapLocalState: any;
+        currentZswapLocalState: EncodedZswapLocalState;
       };
     },
     privateState: P,
-    coinPK: string,
-    contractAddress?: string,
+    coinPK: CoinPublicKey,
+    contractAddress: ContractAddress,
     ...contractArgs: any[]
   ) {
     const initCtx = constructorContext(privateState, coinPK);
@@ -54,7 +57,7 @@ export class StateManager<P> {
       originalState: currentContractState,
       transactionContext: new QueryContext(
         currentContractState.data,
-        contractAddress ?? coinPK,
+        contractAddress,
       ),
     };
   }
