@@ -1,5 +1,6 @@
 import { sampleContractAddress } from '@midnight-ntwrk/zswap';
 import type { BaseSimulatorOptions } from '../types/Options.js';
+import type { IMinimalContract } from '../types/Contract.js';
 import { ContractSimulator } from '../core/ContractSimulator.js';
 import { StateManager } from '../core/StateManager.js';
 import type { SimulatorConfig } from './SimulatorConfig.js';
@@ -19,7 +20,8 @@ import type { SimulatorConfig } from './SimulatorConfig.js';
  */
 export function createSimulator<P, L, W>(config: SimulatorConfig<P, L, W>) {
   return class GeneratedSimulator extends ContractSimulator<P, L> {
-    contract: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    contract: IMinimalContract;
     readonly contractAddress: string;
     public _witnesses: W;
 
