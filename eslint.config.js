@@ -24,6 +24,9 @@ export default [
   })),
 
   {
+    ignores: ['**/artifacts/**', 'test/artifacts/**']
+  },
+  {
     files: ['**/*.ts'],
     plugins: {
       jsdoc,
