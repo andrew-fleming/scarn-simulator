@@ -20,7 +20,7 @@ import {
 import {
   SimplePrivateState,
   SimpleWitnesses,
-} from '../../fixtures/mocks/witnesses/SimpleWitnesses';
+} from '../../fixtures/sampleContracts/witnesses/SimpleWitnesses';
 
 // Helpers
 const toHexPadded = (str: string, len = 64) =>
