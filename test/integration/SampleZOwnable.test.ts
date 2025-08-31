@@ -24,6 +24,12 @@ let secretNonce: Uint8Array;
 let ownable: SampleZOwnableSimulator;
 
 // Helpers
+/**
+ * Create the id hash.
+ * @param pk User's public key.
+ * @param nonce Unique secret nonce.
+ * @returns id hash.
+ */
 const createIdHash = (
   pk: ZswapCoinPublicKey,
   nonce: Uint8Array,
@@ -34,6 +40,13 @@ const createIdHash = (
   return persistentHash(rt_type, [bPK, nonce]);
 };
 
+/**
+ * Create the stored commitment.
+ * @param id User's unique id.
+ * @param instanceSalt Unique value generated for the contract instance.
+ * @param counter Counter.
+ * @returns Commitment.
+ */
 const buildCommitmentFromId = (
   id: Uint8Array,
   instanceSalt: Uint8Array,
@@ -52,6 +65,15 @@ const buildCommitmentFromId = (
   return commitment;
 };
 
+/**
+ * Builds commitment.
+ * @param pk User's public key.
+ * @param nonce User's secret nonce.
+ * @param instanceSalt Unique value generated for the contract instance.
+ * @param counter Counter.
+ * @param domain Contract domain.
+ * @returns Commitment
+ */
 const buildCommitment = (
   pk: ZswapCoinPublicKey,
   nonce: Uint8Array,
