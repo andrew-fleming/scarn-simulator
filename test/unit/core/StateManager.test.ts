@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { StateManager } from '../../src/core/StateManager';
+import { StateManager } from '../../../src/core/StateManager';
 import {
   type CircuitContext,
   QualifiedCoinInfo,
@@ -16,11 +16,11 @@ import {
 import {
   type ContractAddress,
   Contract as MockSimple,
-} from '../artifacts/Simple/contract/index.cjs';
+} from '../../fixtures/artifacts/Simple/contract/index.cjs';
 import {
   SimplePrivateState,
   SimpleWitnesses,
-} from '../mocks/SimpleWitnesses';
+} from '../../fixtures/mocks/witnesses/SimpleWitnesses';
 
 // Helpers
 const toHexPadded = (str: string, len = 64) =>
@@ -48,7 +48,7 @@ describe('StateManager', () => {
    */
   describe('constructor', () => {
     beforeEach(() => {
-      mockContract = new MockSimple<SimplePrivateState>(SimpleWitnesses);
+      mockContract = new MockSimple<SimplePrivateState>(SimpleWitnesses());
       initialPrivateState = {};
 
       stateManager = new StateManager(
@@ -92,7 +92,7 @@ describe('StateManager', () => {
 
   describe('setContext', () => {
     beforeEach(() => {
-      mockContract = new MockSimple<SimplePrivateState>(SimpleWitnesses);
+      mockContract = new MockSimple<SimplePrivateState>(SimpleWitnesses());
       initialPrivateState = {};
 
       stateManager = new StateManager(
