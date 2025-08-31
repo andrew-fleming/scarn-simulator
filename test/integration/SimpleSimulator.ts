@@ -5,7 +5,7 @@ import {
 import {
   SimplePrivateState,
   SimpleWitnesses,
-} from '../fixtures/mocks/witnesses/SimpleWitnesses';
+} from '../fixtures/sampleContracts/witnesses/SimpleWitnesses';
 import { createSimulator, BaseSimulatorOptions } from '../../src/index';
 
 /**
