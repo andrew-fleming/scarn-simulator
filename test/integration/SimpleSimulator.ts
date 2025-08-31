@@ -26,7 +26,7 @@ export class SimpleSimulator extends SimpleSimulatorBase {
   constructor(
     options: BaseSimulatorOptions<SimplePrivateState, ReturnType<typeof SimpleWitnesses>> = {}
   ) {
-    super(options);
+    super([], options);
   }
 
   public setVal(n: bigint) {

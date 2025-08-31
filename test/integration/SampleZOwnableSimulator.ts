@@ -12,12 +12,22 @@ import {
 import { createSimulator, BaseSimulatorOptions } from '../../src/index';
 
 /**
+ * Type constructor args
+ */
+type SampleZOwnableArgs = readonly [owner: Uint8Array, instanceSalt: Uint8Array];
+
+/**
  * Base simulator
  */
-const SampleZOwnableSimulatorBase = createSimulator({
+const SampleZOwnableSimulatorBase = createSimulator<
+  SampleZOwnablePrivateState,
+  ReturnType<typeof ledger>,
+  ReturnType<typeof SampleZOwnableWitnesses>,
+  SampleZOwnableArgs
+>({
   contractFactory: (witnesses) => new SampleZOwnable<SampleZOwnablePrivateState>(witnesses),
   defaultPrivateState: () => SampleZOwnablePrivateState.generate(),
-  contractArgs: (owner: Uint8Array, instanceSalt: Uint8Array) => {
+  contractArgs: (owner, instanceSalt) => {
     return [owner, instanceSalt];
   },
   ledgerExtractor: (state) => ledger(state),
@@ -25,7 +35,7 @@ const SampleZOwnableSimulatorBase = createSimulator({
 });
 
 /**
- * Sample ZOwnable Simulator
+ * SampleZOwnable Simulator
  */
 export class SampleZOwnableSimulator extends SampleZOwnableSimulatorBase {
   constructor(
@@ -33,7 +43,7 @@ export class SampleZOwnableSimulator extends SampleZOwnableSimulatorBase {
     instanceSalt: Uint8Array,
     options: BaseSimulatorOptions<SampleZOwnablePrivateState, ReturnType<typeof SampleZOwnableWitnesses>> = {}
   ) {
-    super(ownerId, instanceSalt, options);
+    super([ownerId, instanceSalt], options);
   }
 
   /**
