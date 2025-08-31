@@ -11,26 +11,15 @@ import {
   EncodedZswapLocalState,
   StateValue,
   EncodedQualifiedCoinInfo,
-  encodeContractAddress
 } from '@midnight-ntwrk/compact-runtime';
 import {
-  type ContractAddress,
   Contract as MockSimple,
 } from '../../fixtures/artifacts/Simple/contract/index.cjs';
 import {
   SimplePrivateState,
   SimpleWitnesses,
 } from '../../fixtures/sampleContracts/witnesses/SimpleWitnesses';
-
-// Helpers
-const toHexPadded = (str: string, len = 64) =>
-  Buffer.from(str, 'ascii').toString('hex').padStart(len, '0');
-
-export const encodeToAddress = (str: string): ContractAddress => {
-  const toHex = Buffer.from(str, 'ascii').toString('hex');
-  const fullAddress = '0200' + String(toHex).padStart(64, '0');
-  return { bytes: encodeContractAddress(fullAddress) };
-};
+import { toHexPadded, encodeToAddress } from '../../fixtures/utils/address';
 
 // Constants
 const DEPLOYER = 'DEPLOYER';

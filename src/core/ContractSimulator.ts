@@ -45,7 +45,7 @@ export abstract class ContractSimulator<P, L> extends AbstractSimulator<P, L> {
   }
 
   /**
-   * Gets the current circuit context from the state manager 
+   * Gets the current circuit context from the state manager
    *
    * @returns The current circuit context
    */
