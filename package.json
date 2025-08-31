@@ -20,7 +20,9 @@
     "clean": "rm -rf dist",
     "lint": "eslint . --ext .ts,.js --ignore-pattern eslint.config.js",
     "lint:fix": "eslint . --ext .ts,.js --fix --ignore-pattern eslint.config.js",
-    "prepublishOnly": "npm run clean && npm run build && npm run test:run"
+    "prepublishOnly": "npm run clean && npm run build && npm run test:run",
+    "docs:generate": "typedoc src --out docs",
+    "docs:serve": "npx http-server docs"
   },
   "devDependencies": {
     "@eslint/js": "^9.34.0",
