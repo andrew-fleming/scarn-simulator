@@ -261,14 +261,14 @@ describe('SampleZOwnable', () => {
       it('should fail when renouncing from unauthorized', () => {
         expect(() => {
           ownable.as(UNAUTHORIZED).renounceOwnership();
-        });
+        }).toThrow('SampleZOwnable: caller is not the owner');
       });
 
       it('should fail when renouncing from authorized with bad nonce', () => {
         ownable.privateState.injectSecretNonce(BAD_NONCE);
         expect(() => {
           ownable.as(OWNER).renounceOwnership();
-        });
+        }).toThrow('SampleZOwnable: caller is not the owner');
       });
 
       it('should fail when renouncing from unauthorized with bad nonce', () => {
