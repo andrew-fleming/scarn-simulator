@@ -25,7 +25,7 @@ const SampleZOwnableSimulatorBase = createSimulator({
 });
 
 /**
- * Simple Simulator
+ * Sample ZOwnable Simulator
  */
 export class SampleZOwnableSimulator extends SampleZOwnableSimulatorBase {
   constructor(
@@ -109,7 +109,7 @@ export class SampleZOwnableSimulator extends SampleZOwnableSimulatorBase {
     /**
      * @description Contextually sets a new nonce into the private state.
      * @param newNonce The secret nonce.
-     * @returns The ZOwnablePK private state after setting the new nonce.
+     * @returns The SampleZOwnable private state after setting the new nonce.
      */
     injectSecretNonce: (
       newNonce: Buffer<ArrayBufferLike>,
