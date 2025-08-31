@@ -24,7 +24,9 @@ export default [
   })),
 
   {
-    ignores: ['**/artifacts/**', 'test/artifacts/**']
+    ignores: [
+      '**/fixtures/**',
+    ]
   },
   {
     files: ['**/*.ts'],
