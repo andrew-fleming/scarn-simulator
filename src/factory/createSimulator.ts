@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return */
+
 import { sampleContractAddress } from '@midnight-ntwrk/zswap';
 import type { BaseSimulatorOptions } from '../types/Options.js';
 import type { IMinimalContract } from '../types/Contract.js';
