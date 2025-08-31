@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return */
 
-import { sampleContractAddress } from '@midnight-ntwrk/zswap';
+import { sampleContractAddress, sampleCoinPublicKey } from '@midnight-ntwrk/zswap';
 import type { BaseSimulatorOptions } from '../types/Options.js';
 import type { IMinimalContract } from '../types/Contract.js';
 import { ContractSimulator } from '../core/ContractSimulator.js';
@@ -20,51 +20,41 @@ import type { SimulatorConfig } from './SimulatorConfig.js';
  * @param config - Configuration object defining how to create and manage the simulator
  * @returns A class constructor that can be extended to create specific simulators
  */
-export function createSimulator<P, L, W>(config: SimulatorConfig<P, L, W>) {
+export function createSimulator<P, L, W, TArgs extends readonly any[]>(
+  config: SimulatorConfig<P, L, W, TArgs>
+) {
   return class GeneratedSimulator extends ContractSimulator<P, L> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
     contract: IMinimalContract;
     readonly contractAddress: string;
     public _witnesses: W;
 
     /**
-     * Creates a new simulator instance with the provided arguments and options.
-     *
-     * @param args - Constructor arguments for the contract, with optional BaseSimulatorOptions as the last parameter
+     * Creates a new simulator instance with explicit contract args and options
      */
-    constructor(...args: any[]) {
-      // Extract options (always last parameter if it looks like options)
-      const lastArg = args[args.length - 1];
-      const hasOptions = lastArg &&
-        typeof lastArg === 'object' &&
-        !Array.isArray(lastArg) &&
-        !(lastArg instanceof Uint8Array) &&
-        ('privateState' in lastArg || 'witnesses' in lastArg || 'coinPK' in lastArg || 'contractAddress' in lastArg);
-
-      const options = hasOptions
-        ? args.pop() as BaseSimulatorOptions<P, W>
-        : {} as BaseSimulatorOptions<P, W>;
+    constructor(
+      contractArgs: TArgs = [] as any,
+      options: BaseSimulatorOptions<P, W> = {}
+    ) {
+      super();
 
       const {
         privateState = config.defaultPrivateState(),
         witnesses = config.witnessesFactory(),
-        coinPK = '0'.repeat(64),
+        coinPK = sampleCoinPublicKey(),
         contractAddress = sampleContractAddress(),
       } = options;
-
-      super();
 
       this._witnesses = witnesses;
       this.contract = config.contractFactory(this._witnesses);
 
-      const contractArgs = config.contractArgs(...args);
+      const processedArgs = config.contractArgs(...contractArgs);
 
       this.stateManager = new StateManager(
         this.contract,
         privateState,
         coinPK,
         contractAddress,
-        ...contractArgs,
+        ...processedArgs,
       );
 
       this.contractAddress = this.circuitContext.transactionContext.address;
