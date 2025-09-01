@@ -1,3 +1,5 @@
+import { CoinPublicKey, ContractAddress } from "@midnight-ntwrk/compact-runtime";
+
 /**
  * Base configuration options for simulator constructors.
  *
@@ -10,7 +12,7 @@ export type BaseSimulatorOptions<P, W> = {
   /** Witness functions (uses default if not provided) */
   witnesses?: W;
   /** Coin public key for transactions */
-  coinPK?: string;
+  coinPK?: CoinPublicKey;
   /** Contract deployment address */
-  contractAddress?: string;
+  contractAddress?: ContractAddress;
 };
