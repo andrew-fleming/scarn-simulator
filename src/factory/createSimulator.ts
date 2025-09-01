@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return */
 
-import { sampleContractAddress, sampleCoinPublicKey } from '@midnight-ntwrk/zswap';
+import { sampleContractAddress } from '@midnight-ntwrk/zswap';
 import type { BaseSimulatorOptions } from '../types/Options.js';
 import type { IMinimalContract } from '../types/Contract.js';
 import { ContractSimulator } from '../core/ContractSimulator.js';
@@ -40,7 +40,7 @@ export function createSimulator<P, L, W, TArgs extends readonly any[]>(
       const {
         privateState = config.defaultPrivateState(),
         witnesses = config.witnessesFactory(),
-        coinPK = sampleCoinPublicKey(),
+        coinPK = '0'.repeat(64),
         contractAddress = sampleContractAddress(),
       } = options;
 
