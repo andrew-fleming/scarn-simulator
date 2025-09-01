@@ -367,7 +367,7 @@ interface BaseSimulatorOptions<P, W> {
   privateState?: P;                   // Initial private state
   witnesses?: W;                      // Custom witness implementations
   coinPK?: CoinPublicKey;             // Coin public key (default: '0'.repeat(64))
-  contractAddress?: ContractAddress;  // Contract address (default: dummyContractAddress())
+  contractAddress?: ContractAddress;  // Contract address (default: sampleContractAddress())
 }
 ```
 
