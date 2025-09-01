@@ -170,7 +170,7 @@ simulator.as(bob).withdraw(50n);
 // Persistent caller context
 simulator.setPersistentCaller(alice);
 simulator.deposit(100n);        // Called by alice
-simulator.transfer(zBob, 50n); // Called by alice
+simulator.transfer(zBob, 50n);  // Called by alice
 
 // Reset caller context
 simulator.resetAllCallers();
