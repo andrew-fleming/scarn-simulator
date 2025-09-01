@@ -15,10 +15,10 @@ allowing you to simulate contract behavior locally without blockchain deployment
 
 ## Installation
 
+Clone me:
+
 ```bash
-npm install scarn-simulator
-# or
-yarn add scarn-simulator
+git clone https://github.com/andrew-fleming/scarn-simulator.git
 ```
 
 ## Quick Start
