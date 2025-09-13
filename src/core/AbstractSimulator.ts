@@ -35,7 +35,7 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Sets the caller context for the next circuit call only (auto-resets).
-   * 
+   *
    * @param caller - The public key to use as the caller for the next circuit execution
    * @returns This simulator instance for method chaining
    */
@@ -46,7 +46,7 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Sets a persistent caller that will be used for all subsequent circuit calls.
-   * 
+   *
    * @param caller - The public key to use as the caller for all future calls, or null to clear
    */
   public setPersistentCaller(caller: CoinPublicKey | null): void {
@@ -54,11 +54,11 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
   }
 
   /**
-   * Clears both single-use and persistent caller overrides.
-   * 
+   * Clears persistent caller overrides.
+   *
    * @returns This simulator instance for method chaining
    */
-  public resetAllCallers(): this {
+  public resetCaller(): this {
     this.callerOverride = null;
     this.persistentCallerOverride = null;
     return this;
@@ -66,7 +66,7 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Retrieves the current private state from the circuit context.
-   * 
+   *
    * @returns The current private state of type P
    */
   public getPrivateState(): P {
@@ -75,7 +75,7 @@ export abstract class AbstractSimulator<P, L> implements IContractSimulator<P, L
 
   /**
    * Retrieves the original contract state from the circuit context.
-   * 
+   *
    * @returns The current contract state from the blockchain
    */
   public getContractState(): ContractState {

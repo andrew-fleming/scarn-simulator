@@ -6,6 +6,7 @@ import type { IMinimalContract } from '../types/Contract.js';
 import { ContractSimulator } from '../core/ContractSimulator.js';
 import { StateManager } from '../core/StateManager.js';
 import type { SimulatorConfig } from './SimulatorConfig.js';
+import type { WitnessContext } from '@midnight-ntwrk/compact-runtime';
 
 /**
  * Factory function to create simulator classes with consistent boilerplate elimination.
@@ -160,5 +161,19 @@ export function createSimulator<P, L, W, TArgs extends readonly any[]>(
         [key]: fn,
       } as W;
     }
-  };
+
+    /**
+     * Gets the current witness context with the proper structure for witness function calls.
+     *
+     * @returns The current witness context that can be passed to witness functions
+     */
+    public getWitnessContext(): WitnessContext<L, P> {
+      const circuitCtx = this.circuitContext;
+      return {
+        ledger: this.getPublicState(),
+        privateState: circuitCtx.currentPrivateState,
+        contractAddress: circuitCtx.transactionContext.address,
+      };
+    }
+  }
 }

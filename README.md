@@ -173,7 +173,7 @@ simulator.deposit(100n);        // Called by alice
 simulator.transfer(zBob, 50n);  // Called by alice
 
 // Reset caller context
-simulator.resetAllCallers();
+simulator.resetCaller();
 ```
 
 ### ⚠️ Important: Key Encoding for Contracts
@@ -377,7 +377,7 @@ interface BaseSimulatorOptions<P, W> {
 |--------|-------------|
 | `as(caller)` | Execute next operation as specified caller |
 | `setPersistentCaller(caller)` | Set persistent caller for all operations |
-| `resetAllCallers()` | Clear all caller contexts |
+| `resetCaller()` | Clears the caller context |
 | `overrideWitness(key, fn)` | Override a specific witness function |
 | `getPrivateState()` | Get current private state |
 | `getPublicState()` | Get current public ledger state |
